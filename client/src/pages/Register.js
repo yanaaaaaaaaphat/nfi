@@ -52,7 +52,7 @@ function Register() {
         <Flex>
           <Flex flexDirection="column">
             <Flex flexDirection="column" mb="20px" p="20px" w="600px" ml="40px">
-              <Heading variant="headline1" textColor="white" size="2xl">
+              <Heading size="2xl" textColor="white">
                 Create an account
               </Heading>
               <Flex

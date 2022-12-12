@@ -32,6 +32,6 @@ const fonts = {
     },
   };
 
-const theme = extendTheme({ fonts });
+const theme = extendTheme({ fonts, components });
 
 export default theme;

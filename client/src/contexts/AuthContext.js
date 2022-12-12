@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 import React, { useState } from "react";
 
 const AuthContext = React.createContext();
@@ -28,16 +29,22 @@ function AuthProvider(props) {
   };
 
   const login = async (loginInfo) => {
-    const result = await axios.post("http://localhost:3000/auth/login",
-    loginInfo
+    const result = await axios.post(
+      "http://localhost:3000/auth/login",
+      loginInfo
     );
     if (/success/g.test(result.data.message)) {
-      navigate("/home");
+      const token = result.data.token;
+      localStorage.setItem("token", token);
+      const userDataFromToken = jwtDecode(token);
+      setUserState({ ...userState, user: userDataFromToken });
+      navigate(`/home/${userDataFromToken.user_id}`);
+
       return true;
     } else {
       return result.data.message;
     }
-  }
+  };
 
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 

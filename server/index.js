@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-// import transactionRouter from "./routes/transaction";
+import transactionRouter from "./routes/transaction.js";
 import authRouter from "./routes/auth.js"
 
 
@@ -15,7 +15,7 @@ async function init() {
   app.use(cors());
   app.use(bodyParser.json());
 
-  // app.use("/transact", transactionRouter);
+  app.use("/transact", transactionRouter);
   app.use("/auth", authRouter);
 
   app.get("*", (req, res) => {

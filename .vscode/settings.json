@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "arjuna.db.elephantsql.com",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "NFI",
+            "database": "mhwzkbgg",
+            "username": "mhwzkbgg"
+        }
+    ]
+}

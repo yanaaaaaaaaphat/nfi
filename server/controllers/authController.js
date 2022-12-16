@@ -41,6 +41,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   // try {
+  
     const loginInfo = { ...req.body };
     const user = await pool.query(`select * from users where email ilike $1 `, [
       loginInfo.email,

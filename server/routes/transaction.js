@@ -5,10 +5,8 @@ const transactionRouter = Router();
 
 // Get User's Account Balance
 transactionRouter.get("/:userId", transactionController.getBalance);
-// Deposit
-// transactionRouter.put("/:userId", transactionController.deposit);
+// Transactions: Deposit and withdraw
+transactionRouter.put("/:userId", transactionController.transact);
 
-// // Withdraw
-// transactionRouter.put("/withdraw", transactionController.withdraw);
 
 export default transactionRouter;

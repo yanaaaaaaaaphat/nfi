@@ -4,13 +4,11 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  FormHelperText,
   Input,
   Button,
   Flex,
   Heading,
   Link,
-  Image,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import { useAuth } from "../contexts/AuthContext";
@@ -18,6 +16,7 @@ import { useAuth } from "../contexts/AuthContext";
 function Login() {
   const { login } = useAuth();
   const handleSubmit = async (values, props) => {
+    console.log(values);
     const result = await login(values);
   };
 

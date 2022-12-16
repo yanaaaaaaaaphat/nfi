@@ -1,65 +1,154 @@
 import {
   Box,
   Text,
-  FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Button,
   Flex,
   Heading,
   Link,
-  Image,
+
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+let action = "";
 
 function Home() {
+  let [amt, setAmt] = useState(0);
+  let [userBalance, setUserBalance] = useState(0);
+  const { logout } = useAuth();
+  let { userId } = useParams();
+  let [deposit, setDeposit] = useState(false);
+  let [withdraw, setWithdraw] = useState(false);
 
-    const [userBalance, setUserBalance] = useState(0);
-    const { userState } = useAuth();
-    const userId = userState.user.user_id;
+  const getData = async () => {
+    const balance = await axios.get(`http://localhost:3000/transact/${userId}`);
+    setUserBalance(balance.data.data);
+    window.localStorage.setItem("balance", balance.data.data);
+  };
 
-    const getData = async (userId) => {
-        const balance = await axios.get(`http://localhost:3000/${userId}`);
-        setUserBalance(balance.data)
+  const handleTransact = async (amount) => {
+    console.log(action);
+
+    const result = await axios.put(`http://localhost:3000/transact/${userId}`, {
+      amount: amount,
+      action: action,
+    });
+    setDeposit(false);
+    setWithdraw(false);
+    getData();
+
+    if (/balance/g.test(result.data.message)) {
+        alert("Not enough balance");
     }
+  };
 
-    useEffect(()=>{
-        getData();
-    })
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
       {/* Navbar */}
-      <Flex bgColor="black" gap="40px" px="40px" pt="10px" alignItems="center" h="80px">
-        <Link textColor="orange" ml="20px">Dashboard</Link>
+      <Flex
+        bgColor="black"
+        gap="70px"
+        px="40px"
+        pt="10px"
+        alignItems="center"
+        h="80px"
+        justifyContent="flex-end"
+      >
+        <Link textColor="orange" ml="20px">
+          Dashboard
+        </Link>
         <Link textColor="orange">Wallet</Link>
         <Link textColor="orange">Activity</Link>
         <Link textColor="orange">Help</Link>
+        <Button
+          onClick={() => {
+            logout();
+          }}
+        >
+          log out
+        </Button>
       </Flex>
 
       {/* Main Section */}
-      <Box bgColor="black" h="100vh" p="40px" bgImage="../../assets/bg2.png"
+      <Box
+        bgColor="black"
+        h="100vh"
+        p="40px"
+        bgImage="../../assets/bg2.png"
         backgroundSize="cover"
-        backgroundRepeat="no-repeat">
-        <Flex
-          flexDirection="column"
-        //   border="1px"
-        //   borderRadius="16px"
-          w="30%"
-          p="20px"
-          gap="40px"
-        >
+        backgroundRepeat="no-repeat"
+      >
+        <Flex flexDirection="column" w="30%" p="20px" gap="40px">
           <Heading variant="headline3">Your Balance</Heading>
-          <Heading variant="headline1">$ {userBalance}</Heading>
-          <Flex gap="15px"><Button w="40%" colorScheme="green">Deposit</Button><Button w="40%" colorScheme="orange">
-            Withdraw
-          </Button>
+          <Heading variant="headline1">
+            $ {window.localStorage.getItem("balance")}
+          </Heading>
+          <Flex gap="15px">
+            <Button
+              w="40%"
+              colorScheme="green"
+              disabled={action == "withdraw" ? true : false}
+              onClick={() => {
+                setDeposit(true);
+                action = "deposit";
+              }}
+            >
+              Deposit
+            </Button>
+            <Button
+              w="40%"
+              colorScheme="orange"
+              disabled={action == "deposit" ? true : false}
+              onClick={() => {
+                setWithdraw(true);
+                action = "withdraw";
+              }}
+            >
+              Withdraw
+            </Button>
           </Flex>
-          
+          <Flex
+            flexDirection="column"
+            gap="20px"
+            visibility={deposit || withdraw ? "visible" : "hidden"}
+          >
+            <FormLabel textColor="white">
+              Amount to {action == "deposit" ? "deposit" : "withdraw"}
+            </FormLabel>
+            <Input
+              textColor="white"
+              type="number"
+              min="0"
+              onChange={(e) => setAmt(e.target.value)}
+              isRequired
+            ></Input>
+            <Button
+              onClick={() => {
+                handleTransact(amt);
+                action = "";
+                
+              }}
+            >
+              Confirm
+            </Button>
+            <Button
+              onClick={() => {
+                setDeposit(false);
+                setWithdraw(false);
+                action = "";
+              }}
+            >
+              Cancel
+            </Button>
+          </Flex>
         </Flex>
       </Box>
     </>

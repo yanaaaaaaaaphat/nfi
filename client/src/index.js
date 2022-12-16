@@ -6,7 +6,10 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthProvider } from "./contexts/AuthContext.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import jwtInterceptor from "./utils/jwtInterceptors";
 import theme from "./configs/theme.js";
+
+jwtInterceptor();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

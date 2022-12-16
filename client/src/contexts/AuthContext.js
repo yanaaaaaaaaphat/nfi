@@ -35,8 +35,9 @@ function AuthProvider(props) {
     );
     if (/success/g.test(result.data.message)) {
       const token = result.data.token;
-      localStorage.setItem("token", token);
+      window.localStorage.setItem("token", token);
       const userDataFromToken = jwtDecode(token);
+      console.log(userDataFromToken);
       setUserState({ ...userState, user: userDataFromToken });
       navigate(`/home/${userDataFromToken.user_id}`);
 
@@ -48,9 +49,15 @@ function AuthProvider(props) {
 
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
+  const logout = () => {
+    localStorage.removeItem("token")
+    setUserState({...userState, user: null});
+    navigate("/login");
+  }
+
   return (
     <AuthContext.Provider
-      value={{ userState, setUserState, register, login, isAuthenticated }}
+      value={{ userState, setUserState, register, login, isAuthenticated, logout }}
     >
       {props.children}
     </AuthContext.Provider>

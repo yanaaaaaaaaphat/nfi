@@ -16,7 +16,6 @@ import { useAuth } from "../contexts/AuthContext";
 function Login() {
   const { login } = useAuth();
   const handleSubmit = async (values, props) => {
-    console.log(values);
     const result = await login(values);
   };
 

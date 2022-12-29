@@ -37,7 +37,6 @@ function AuthProvider(props) {
       const token = result.data.token;
       window.localStorage.setItem("token", token);
       const userDataFromToken = jwtDecode(token);
-      console.log(userDataFromToken);
       setUserState({ ...userState, user: userDataFromToken });
       navigate(`/home/${userDataFromToken.user_id}`);
 

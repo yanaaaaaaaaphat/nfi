@@ -31,8 +31,6 @@ function Home() {
   };
 
   const handleTransact = async (amount) => {
-    console.log(userBalance);
-    console.log(action);
 
     const result = await axios.put(`http://localhost:3000/transact/${userId}`, {
       amount: amount,

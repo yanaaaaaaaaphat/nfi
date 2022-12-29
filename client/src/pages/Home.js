@@ -31,6 +31,7 @@ function Home() {
   };
 
   const handleTransact = async (amount) => {
+    console.log(userBalance);
     console.log(action);
 
     const result = await axios.put(`http://localhost:3000/transact/${userId}`, {
@@ -41,7 +42,7 @@ function Home() {
     setWithdraw(false);
     getData();
 
-    if (/balance/g.test(result.data.message)) {
+    if (/negative/g.test(result.data.message)) {
         alert("Not enough balance");
     }
   };
